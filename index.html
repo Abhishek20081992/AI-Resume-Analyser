@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Resume Analyser | AI Projects for Non-Techies</title>
+    
+    <!-- Chosen Palette: Modern Blue-Grey and Purple -->
+    <!-- Application Structure Plan: A user-centric, step-by-step interactive tool. The structure is a linear process to guide the user from input to output: 1) A "Welcome & Lead Capture" section with a form to gate access. 2) A "Resume Upload & Input" section where the user can choose to upload a file or paste text. 3) A dynamic "Analysis & Results" section that updates with evaluation criteria and an updated resume. This structure prioritizes a clear, task-oriented user flow and directly addresses the primary goal of providing resume feedback. -->
+    <!-- Visualization & Content Choices: 
+        - Lead Capture Form -> Interactive HTML Form -> Goal: Collect user data before tool usage. Justification: Essential for building a lead list and providing personalized results.
+        - Resume Input -> File Upload + Textarea (HTML/JS) -> Goal: Allow flexible resume input. Justification: Accommodates both file-based and copy-paste users.
+        - Evaluation Criteria -> Interactive Progress Bars & Text Blocks (HTML/CSS/JS) -> Goal: Visualize performance metrics. Justification: Presents complex data (scores) in a simple, digestible, and engaging format.
+        - Updated Resume -> Dynamic Textarea (HTML/JS) -> Goal: Present actionable feedback. Justification: Provides a practical, copy-and-paste ready result for the user.
+        - All visuals are created using structured HTML and Tailwind CSS.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* slate-50 */
+        }
+        .text-gradient {
+            background: linear-gradient(45deg, #6366f1, #a855f7); /* indigo-500 to violet-500 */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+        }
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <!-- Header & Navigation -->
+    <header class="bg-white sticky top-0 z-50 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <h1 class="text-2xl font-bold text-slate-900">AI Resume Analyser</h1>
+                </div>
+                <nav class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#analyzer" class="text-slate-600 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium">Analyser</a>
+                        <a href="#results" class="text-slate-600 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium">Results</a>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+
+        <!-- Introduction & Lead Capture -->
+        <div id="capture-section" class="text-center mb-16 max-w-2xl mx-auto">
+            <h2 class="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">Level Up Your Resume</h2>
+            <p class="mt-4 text-xl text-slate-600">Get an instant AI-powered analysis of your resume's strengths and weaknesses, tailored to stand out in today's market. Free of charge.</p>
+            <div class="mt-8 bg-white p-8 rounded-lg shadow-lg">
+                <form id="leadCaptureForm" class="space-y-4">
+                    <input type="text" id="userName" name="name" placeholder="Your Name" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                    <input type="email" id="userEmail" name="email" placeholder="Your Email ID" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                    <button type="submit" class="w-full bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:bg-indigo-700 transform hover:scale-105 transition duration-300">
+                        Start Your Free Analysis
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Section 2: Resume Input -->
+        <section id="analyzer" class="mb-16 hidden">
+            <h3 class="text-3xl font-bold text-slate-900 border-b-4 border-indigo-500 pb-2 mb-8 text-center">Step 1: Upload or Paste Your Resume</h3>
+            <div class="bg-white p-8 rounded-lg shadow-lg max-w-4xl mx-auto">
+                <p class="text-slate-600 mb-6 text-center text-lg">Your data is processed locally and securely. We only send the text for analysis, not the file itself.</p>
+                <div class="flex flex-col md:flex-row items-center justify-center space-y-6 md:space-y-0 md:space-x-6">
+                    <div class="w-full md:w-1/2">
+                        <label for="resumeFile" class="block text-center text-lg font-medium text-slate-700 mb-2">Upload Resume File (.txt, .pdf)</label>
+                        <input type="file" id="resumeFile" accept=".txt,.pdf" class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100">
+                    </div>
+                    <div class="text-center text-slate-500 text-xl font-bold">OR</div>
+                    <div class="w-full md:w-1/2">
+                        <label for="resumeText" class="block text-center text-lg font-medium text-slate-700 mb-2">Paste Your Resume Text</label>
+                        <textarea id="resumeText" rows="10" placeholder="Paste your resume text here..." class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"></textarea>
+                    </div>
+                </div>
+                <div class="mt-8 text-center">
+                    <button id="analyzeBtn" class="bg-indigo-600 text-white font-bold py-3 px-12 rounded-lg shadow-lg hover:bg-indigo-700 transform hover:scale-105 transition duration-300">
+                        Analyze Resume
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Analysis & Results -->
+        <section id="results" class="mb-16 hidden">
+            <h3 class="text-3xl font-bold text-slate-900 border-b-4 border-indigo-500 pb-2 mb-8 text-center">Step 2: Your Resume Analysis</h3>
+            <div class="bg-white p-8 rounded-lg shadow-lg max-w-4xl mx-auto">
+                <div id="loading" class="text-center text-indigo-600 text-xl hidden">
+                    <p>Analysing your resume with AI... this may take a moment.</p>
+                </div>
+                <div id="analysis-results" class="hidden">
+                    <div class="mb-8">
+                        <h4 class="text-2xl font-bold text-indigo-600 mb-4">Overall Score: <span id="overallScore" class="text-indigo-900"></span></h4>
+                        <p class="text-lg text-slate-600">The overall readability and effectiveness of your resume in a digital-first world.</p>
+                    </div>
+
+                    <!-- Evaluation Criteria -->
+                    <div class="space-y-6 mb-8">
+                        <div>
+                            <h4 class="text-xl font-bold">Keyword Analysis</h4>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5 mt-2">
+                                <div id="keyword-score" class="bg-purple-600 h-2.5 rounded-full" style="width: 0%;"></div>
+                            </div>
+                            <p class="text-sm text-slate-500 mt-1">Evaluation of industry-relevant keywords found in your resume.</p>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold">Grammar & Spelling</h4>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5 mt-2">
+                                <div id="grammar-score" class="bg-purple-600 h-2.5 rounded-full" style="width: 0%;"></div>
+                            </div>
+                            <p class="text-sm text-slate-500 mt-1">Accuracy of grammar and spelling, crucial for a professional look.</p>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold">Readability & Attractiveness</h4>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5 mt-2">
+                                <div id="readability-score" class="bg-purple-600 h-2.5 rounded-full" style="width: 0%;"></div>
+                            </div>
+                            <p class="text-sm text-slate-500 mt-1">AI's assessment of resume's formatting, layout, and visual appeal.</p>
+                        </div>
+                    </div>
+
+                    <!-- Updated Resume with Suggestions -->
+                    <div class="mt-8">
+                        <h4 class="text-2xl font-bold text-indigo-600 mb-4">Suggestions & Revised Resume</h4>
+                        <p class="text-lg text-slate-600 mb-4">Here are the AI's recommendations. The updated resume below incorporates these changes for you to copy and paste.</p>
+                        <div id="suggestions" class="bg-gray-100 p-4 rounded-lg border border-gray-200 mb-6">
+                            <!-- Suggestions will be dynamically added here -->
+                            <p>Loading suggestions...</p>
+                        </div>
+                        <textarea id="updatedResume" rows="15" readonly class="w-full p-4 border border-gray-300 rounded-lg bg-gray-50 font-mono text-sm resize-none"></textarea>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-900 text-white">
+        <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 text-center">
+            <p>&copy; 2025 AI Projects for Non-Techies. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+    <script>
+        const webAppUrl = "YOUR_APPS_SCRIPT_URL_HERE"; // IMPORTANT: Replace with your deployed Web App URL
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const leadCaptureForm = document.getElementById('leadCaptureForm');
+            const captureSection = document.getElementById('capture-section');
+            const analyzerSection = document.getElementById('analyzer');
+            const resultsSection = document.getElementById('results');
+            const analyzeBtn = document.getElementById('analyzeBtn');
+            const resumeFile = document.getElementById('resumeFile');
+            const resumeText = document.getElementById('resumeText');
+            const loadingIndicator = document.getElementById('loading');
+            const analysisResultsDiv = document.getElementById('analysis-results');
+
+            let userInfo = {};
+
+            const parsePDF = async (file) => {
+                const pdfjsLib = window['pdfjs-dist/build/pdf'];
+                pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js`;
+
+                const arrayBuffer = await file.arrayBuffer();
+                const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+                let textContent = '';
+                for (let i = 1; i <= pdf.numPages; i++) {
+                    const page = await pdf.getPage(i);
+                    const text = await page.getTextContent();
+                    textContent += text.items.map(item => item.str).join(' ');
+                }
+                return textContent;
+            };
+
+            const analyzeResume = async (resumeContent) => {
+                loadingIndicator.classList.remove('hidden');
+                analysisResultsDiv.classList.add('hidden');
+                resultsSection.classList.remove('hidden');
+                window.location.hash = '#results';
+
+                try {
+                    const response = await fetch(webAppUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ resumeContent })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`API error: ${response.status} ${response.statusText}`);
+                    }
+                    
+                    const result = await response.json();
+                    
+                    // The result from Apps Script has a nested structure from the Gemini API
+                    const geminiResult = JSON.parse(result.candidates[0].content.parts[0].text);
+                    displayResults(geminiResult);
+
+                } catch (error) {
+                    loadingIndicator.innerHTML = `<p class="text-red-500">Error: Failed to analyze resume. Please try again. Check console for details.</p>`;
+                    console.error('API call failed:', error);
+                }
+            };
+            
+            const displayResults = (result) => {
+                loadingIndicator.classList.add('hidden');
+                analysisResultsDiv.classList.remove('hidden');
+                
+                const getScore = (score) => {
+                    const value = parseInt(score.replace('/100', ''));
+                    return isNaN(value) ? '0%' : `${value}%`;
+                }
+
+                document.getElementById('overallScore').textContent = result.evaluation.overall_score;
+                document.getElementById('keyword-score').style.width = getScore(result.evaluation.keyword_score);
+                document.getElementById('grammar-score').style.width = getScore(result.evaluation.grammar_score);
+                document.getElementById('readability-score').style.width = getScore(result.evaluation.readability_score);
+                
+                const suggestionsList = document.getElementById('suggestions');
+                suggestionsList.innerHTML = '';
+                result.suggestions.forEach(s => {
+                    const p = document.createElement('p');
+                    p.textContent = `• ${s}`;
+                    p.classList.add('mb-2');
+                    suggestionsList.appendChild(p);
+                });
+                
+                document.getElementById('updatedResume').value = result.updated_resume;
+            };
+
+            leadCaptureForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                userInfo.name = document.getElementById('userName').value;
+                userInfo.email = document.getElementById('userEmail').value;
+                
+                // Submit to Formspree for lead capture (fire-and-forget)
+                try {
+                     await fetch("YOUR_FORMSPREE_ENDPOINT_HERE", {
+                        method: 'POST',
+                        body: JSON.stringify({ name: userInfo.name, email: userInfo.email, industry: 'Resume Analyser User' }),
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+                } catch (error) {
+                    console.error('Formspree submission failed:', error);
+                }
+                
+                // Show the next section
+                captureSection.classList.add('hidden');
+                analyzerSection.classList.remove('hidden');
+                window.location.hash = '#analyzer';
+            });
+            
+            analyzeBtn.addEventListener('click', async () => {
+                let resumeContent = resumeText.value;
+                if (resumeFile.files.length > 0) {
+                    const file = resumeFile.files[0];
+                    if (file.type === 'application/pdf') {
+                        // Use the globally loaded PDF.js
+                        resumeContent = await parsePDF(file);
+                        if (resumeContent) {
+                            analyzeResume(resumeContent);
+                        } else {
+                            alert('Could not extract text from PDF. Please try pasting the text instead.');
+                        }
+                    } else if (file.type === 'text/plain') {
+                        const reader = new FileReader();
+                        reader.onload = async (e) => {
+                            resumeContent = e.target.result;
+                            analyzeResume(resumeContent);
+                        };
+                        reader.readAsText(file);
+                    } else {
+                        alert('Unsupported file type. Please upload a .txt or .pdf file.');
+                    }
+                } else if (resumeContent.trim() !== '') {
+                    analyzeResume(resumeContent);
+                } else {
+                    alert('Please upload a resume file or paste your resume text.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
